@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\Opaaje\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Opaaje\\.nuget\\packages"
+    ]
+  }
+}
