@@ -4,9 +4,9 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication1.Models;
+using FileDelivery.Models;
 
-namespace WebApplication1.DAL
+namespace FileDelivery.DAL
 {
     public class AppContext : DbContext
     {

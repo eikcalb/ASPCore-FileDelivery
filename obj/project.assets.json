@@ -1023,11 +1023,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Opaaje\\source\\repos\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
-      "projectName": "WebApplication1",
-      "projectPath": "C:\\Users\\Opaaje\\source\\repos\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+      "projectUniqueName": "C:\\Users\\Opaaje\\source\\repos\\FileDelivery\\FileDelivery\\FileDelivery.csproj",
+      "projectName": "FileDelivery",
+      "projectPath": "C:\\Users\\Opaaje\\source\\repos\\FileDelivery\\FileDelivery\\FileDelivery.csproj",
       "packagesPath": "C:\\Users\\Opaaje\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Opaaje\\source\\repos\\WebApplication1\\WebApplication1\\obj\\",
+      "outputPath": "C:\\Users\\Opaaje\\source\\repos\\FileDelivery\\FileDelivery\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Opaaje\\AppData\\Roaming\\NuGet\\NuGet.Config",

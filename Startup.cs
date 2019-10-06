@@ -8,8 +8,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using FileDelivery.DAL;
 
-namespace WebApplication1
+namespace FileDelivery
 {
     public class Startup
     {
@@ -24,6 +25,10 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDbContext<AppContext>();
+            // Add data repository service to DI
+            services.AddScoped<IDataService, DataRepository>();
 
         }
 
