@@ -1,0 +1,64 @@
+﻿using FileDelivery.Models;
+using MailKit.Net.Smtp;
+using MimeKit;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace FileDelivery.Util
+{
+    public class Mail
+    {
+
+        protected static async Task SendEmailAsync(Entry entry, MailboxAddress to)
+        {
+            MimeMessage message = new MimeMessage();
+            message.From.Add(new MailboxAddress("File Delivery Application", "files@eikcalb.dev"));
+            message.To.Add(to);
+            message.Subject = "Your Files are ready!";
+            message.Importance = MessageImportance.High;
+            message.Priority = MessagePriority.Normal;
+
+            BodyBuilder body = new BodyBuilder();
+            body.HtmlBody = @$"Hello {entry.Name},
+
+            Your files are ready for download.
+
+            The files have been added as attachments to this mail and can also be accessed in the application.
+
+            To access these files in the application, use the following:
+                Email Address - {entry.EmailAddress}
+                Transaction - {entry.TransactionID}
+
+
+            Thank you for using File Delivery
+            -- Eikcalb";
+
+            foreach (Upload upload in entry.Uploads)
+            {
+                if (System.IO.File.Exists(upload.Path))
+                {
+                    body.Attachments.Add(upload.Path).ContentDisposition.FileName = upload.FileName;
+                }
+            }
+
+            // Set the message body.
+            message.Body = body.ToMessageBody();
+
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.office365.com", 587, true);
+
+                // Oauth2 not implemented for mailbox yet.
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
+                client.Authenticate(Environment.GetEnvironmentVariable("SMTP_CLIENT_ADDRESS"), Environment.GetEnvironmentVariable("SMTP_CLIENT_PASSWORD"));
+
+                await client.SendAsync(message);
+                client.Disconnect(true);
+            }
+        }
+
+
+    }
+}

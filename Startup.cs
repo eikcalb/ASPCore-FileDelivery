@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 using FileDelivery.DAL;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace FileDelivery
 {
@@ -24,9 +26,26 @@ namespace FileDelivery
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddSessionStateTempDataProvider();
+            services.AddRazorPages();
 
-            services.AddDbContext<AppContext>();
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new System.IO.DirectoryInfo("~"));
+
+            // Configuration for aplication sessions.
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                // TODO: Change
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Name = ".FileDelivery.Session";
+                options.Cookie.IsEssential = true;
+            });
+
+
+            // Entity Framework DbContext.
+            services.AddDbContext<AppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppDBContext")));
             // Add data repository service to DI
             services.AddScoped<IDataService, DataRepository>();
 
@@ -47,11 +66,11 @@ namespace FileDelivery
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseRouting();
 
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

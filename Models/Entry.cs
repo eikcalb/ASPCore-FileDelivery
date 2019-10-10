@@ -4,15 +4,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FileDelivery.Models
 {
+    /**
+     * Model for representing a submission.
+     * <see cref="Entry"/> is the database model, while <see cref="EntryViewModel"/> represents the model used for the view.
+     */
     public class Entry
     {
         public int ID { get; set; }
 
-        [Display(Name = "First Name")]
-        public string FirstName { get; set; }
-
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        [Display(Name = "Name")]
+        [Required]
+        public string Name { get; set; }
 
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email Address")]
@@ -26,15 +28,17 @@ namespace FileDelivery.Models
         [Phone]
         public string PhoneNumber { get; set; }
 
-        [MinLength(1)]
+        [Range(minimum: 1, maximum: int.MaxValue)]
         public int Age { get; set; }
 
-        public int TransactionID { get; set; }
+        [Required]
+        public string TransactionID { get; set; }
 
+        [Required]
         public virtual ICollection<Upload> Uploads { get; set; }
     }
 
-    public class EntryViewModel: Entry
+    public class EntryViewModel : Entry
     {
         public IFormFileCollection Files { get; set; }
     }

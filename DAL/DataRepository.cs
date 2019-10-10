@@ -6,16 +6,18 @@ using FileDelivery.Models;
 
 namespace FileDelivery.DAL
 {
-    interface IDataService
+    public interface IDataService
     { 
         void AddEntry(Entry entry);
     }
 
     public class DataRepository : IDataService
     {
-        public DataRepository()
-        {
+        protected readonly AppDBContext _context;
 
+        public DataRepository(AppDBContext context)
+        {
+            _context = context;
         }
 
         public void AddEntry(Entry entry)
