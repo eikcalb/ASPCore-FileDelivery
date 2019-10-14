@@ -29,7 +29,7 @@
 @{
     if (Model != null)
     {
-        <div class="jumbotron jumbotron-fluid">
+        <div class="jumbotron jumbotron-fluid bg-transparent">
             <div class="container">
                 <h1 class="display-4">Hello, @Html.DisplayFor(e => e.Name)</h1>
                 <p class="lead">Your files are ready!</p>
@@ -38,26 +38,26 @@
         </div>
         <div class="p-2">
             <div class="row">
-                <div class="col-2 text-uppercase">@Html.DisplayNameFor(e => e.TransactionID)</div>
-                <div class="col-10">@Html.DisplayFor(e => e.TransactionID)</div>
+                <div class="col-md-3 text-uppercase">@Html.DisplayNameFor(e => e.TransactionID)</div>
+                <div class="col-md-9">@Html.DisplayFor(e => e.TransactionID)</div>
             </div>
             <div class="row">
-                <div class="col-2 text-uppercase">@Html.DisplayNameFor(e => e.EmailAddress)</div>
-                <div class="col-10">@Html.DisplayFor(e => e.EmailAddress)</div>
+                <div class="col-md-3 text-uppercase">@Html.DisplayNameFor(e => e.EmailAddress)</div>
+                <div class="col-md-9">@Html.DisplayFor(e => e.EmailAddress)</div>
             </div>
             <div class="row">
-                <div class="col-2 text-uppercase">@Html.DisplayNameFor(e => e.PhoneNumber)</div>
-                <div class="col-10 text-uppercase">@Html.DisplayFor(e => e.PhoneNumber)</div>
+                <div class="col-md-3 text-uppercase">@Html.DisplayNameFor(e => e.PhoneNumber)</div>
+                <div class="col-md-9 text-uppercase">@Html.DisplayFor(e => e.PhoneNumber)</div>
             </div>
             <div class="row">
-                <div class="col-2 text-uppercase">@Html.DisplayNameFor(e => e.Age)</div>
-                <div class="col-10">@Html.DisplayFor(e => e.Age)</div>
+                <div class="col-md-3 text-uppercase">@Html.DisplayNameFor(e => e.Age)</div>
+                <div class="col-md-9">@Html.DisplayFor(e => e.Age)</div>
             </div>
 
             <div class="row m-4">
                 @{ foreach (Upload upload in Model.Uploads)
                     {
-                        <a download="@upload.FileName" href="@upload.Path" class="col-5 btn btn-block btn-outline-info p-3 m-1">
+                        <a download="@upload.FileName" href="\@upload.Path" class="col-md-6 btn btn-block btn-outline-info p-3 m-0">
                             @HtmlEncoder.Encode(upload.FileName) <span class="badge badge-pill badge-dark">@HtmlEncoder.Encode(upload.ContentType)</span>
                         </a>
                     };
