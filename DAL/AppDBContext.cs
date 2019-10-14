@@ -25,7 +25,7 @@ namespace FileDelivery.DAL
                 .IsUnique(true);
         }
 
-        public DbSet<Entry> Entries;
-        public DbSet<Upload> Uploads;
+        public DbSet<Entry> Entries { get; set; }
+        public DbSet<Upload> Uploads { get; set; }
     }
 }

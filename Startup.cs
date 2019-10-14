@@ -37,7 +37,7 @@ namespace FileDelivery
             services.AddSession(options =>
             {
                 // TODO: Change
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromSeconds(30);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.Name = ".FileDelivery.Session";
                 options.Cookie.IsEssential = true;
@@ -46,9 +46,6 @@ namespace FileDelivery
 
             // Entity Framework DbContext.
             services.AddDbContext<AppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppDBContext")));
-            // Add data repository service to DI
-            services.AddScoped<IDataService, DataRepository>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

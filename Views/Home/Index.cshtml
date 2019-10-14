@@ -1,4 +1,4 @@
-﻿@model FileDelivery.Models.EntryViewModel
+﻿@model FileDelivery.Models.EntryViewModel;
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -17,7 +17,10 @@
         </div>
     </div>
 
-    @Html.Hidden("TransactionID", TempData["TranxID"])
+    @Html.Hidden("TransactionID", TempData.Peek("TranxID"))
+    @{
+        TempData.Keep("TranxID");
+    }
 
     <div class="row">
         <div class="col">
@@ -64,7 +67,7 @@
             <span asp-validation-for="Files" class="text-danger form-text"></span>
         *@
         <label asp-for="Files"></label>
-        <input asp-for="Files" type="file" class="form-control-file" multiple>
+        <input required asp-for="Files" type="file" class="form-control-file" multiple>
         <span asp-validation-for="Files" class="text-danger form-text"></span>
     </div>
 
@@ -75,12 +78,14 @@
         </button>
     </div>
 
-    <div class="progress progress-striped active">
-        <div class="progress-bar progress-bar-success" role="progressbar" id="entryProgressbar" style="width: 0%"></div>
+    <div class="progress">
+        <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" id="entryProgressBar" style="width: 0%"></div>
     </div>
 
     <div style="margin-top:15px">
-        <output name="result"></output>
+        <output name="result">
+            @ViewData["Response"]
+        </output>
     </div>
 
 </form>
@@ -95,11 +100,16 @@
     "use strict";
 
     function AJAXSubmit(oFormElement) {
+        $("#entryProgressBar").css("width", '0%');
 
-        $("#entrySubmit").prop('disabled', true).find("#entrySubmitSpinner").removeProp("hidden");
+        const isValid = $(oFormElement).valid();
+        console.log(`Form is valid? ${isValid}`);
 
+        if (!isValid) {
+            return false
+        }
 
-        console.log(oFormElement.reportValidity(), $(oFormElement).validate() );
+        $("#entrySubmit").attr('disabled', true).find("#entrySubmitSpinner").removeAttr("hidden");
 
         return new Promise((res, rej) => {
             var oReq = new XMLHttpRequest();
@@ -114,21 +124,35 @@
 
                 //oFormElement.elements.namedItem("result").value = 'Result: ' + this.status + ' ' + this.statusText;
             };
-            oReq.onprogress = function (progress) {
-                $("#entryProgressBar").css("width", `${(progress.lengthComputable / progress.total) * 100}%`);
+            oReq.upload.onprogress = (progress) => {
+                if (progress.lengthComputable) {
+                    const val = `${(progress.loaded / progress.total) * 100}%`;
+                    console.log('progress called', progress, val)
+
+                    $("#entryProgressBar").css("width", val);
+                    if (val === '100%') {
+                        $("#entryProgressBar").removeClass('progress-bar-animated');
+                    }
+                }
             };
+
             oReq.open("post", oFormElement.action);
+            oReq.setRequestHeader("x-api", "true");
             oReq.send(new FormData(oFormElement));
         })
             .then((xhr) => {
-                oFormElement.elements.namedItem("result").value = 'Result: ' + xhr.status + ' ' + xhr.statusText;
+                if (xhr.status !== 200) {
+                    throw new Error(`${xhr.status}: ${JSON.parse(xhr.response).status}`);
+                }
+                oFormElement.elements.namedItem("result").value = 'Result: ' + xhr.status + ' ' + JSON.parse(xhr.response).status;
             })
             .catch(e => {
                 console.log(e);
                 oFormElement.elements.namedItem("result").value = e.message;
             })
             .finally(() => {
-                $("#entrySubmit").removeProp('disabled').find("#entrySubmitSpinner").prop("hidden", true);
+                console.log("Finally executed!")
+                $("#entrySubmit").removeAttr('disabled').find("#entrySubmitSpinner").attr("hidden", true);
             });
 
     }
