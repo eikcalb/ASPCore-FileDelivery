@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using FileDelivery.DAL;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace FileDelivery
 {
@@ -63,6 +65,12 @@ namespace FileDelivery
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ServeUnknownFileTypes = true,
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
+                RequestPath = "/Uploads"
+            });
             app.UseSession();
 
             app.UseRouting();

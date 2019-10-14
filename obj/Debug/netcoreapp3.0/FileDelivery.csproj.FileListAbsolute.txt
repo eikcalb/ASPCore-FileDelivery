@@ -127,3 +127,4 @@ C:\Users\Opaaje\source\repos\FileDelivery\FileDelivery\obj\Debug\netcoreapp3.0\F
 C:\Users\Opaaje\source\repos\FileDelivery\FileDelivery\obj\Debug\netcoreapp3.0\FileDelivery.Views.pdb
 C:\Users\Opaaje\source\repos\FileDelivery\FileDelivery\obj\Debug\netcoreapp3.0\FileDelivery.dll
 C:\Users\Opaaje\source\repos\FileDelivery\FileDelivery\obj\Debug\netcoreapp3.0\FileDelivery.pdb
+C:\Users\Opaaje\source\repos\FileDelivery\FileDelivery\obj\Debug\netcoreapp3.0\Razor\Views\Home\Browse.cshtml.g.cs

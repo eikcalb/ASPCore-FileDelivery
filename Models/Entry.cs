@@ -44,12 +44,12 @@ namespace FileDelivery.Models
         public IFormFileCollection Files { get; set; }
 
         // parse uploaded documents.
-        public async Task<Entry> Parse(EntryViewModel entryViewModel,string rootPath)
+        public async Task<Entry> Parse(EntryViewModel entryViewModel, string rootPath)
         {
             entryViewModel.Uploads = new List<Upload>();
-            var entryPath = Path.Combine(rootPath,"uploads", entryViewModel.TransactionID);
+            var entryPath = Path.Combine(rootPath, "uploads", entryViewModel.TransactionID);
 
-            if(entryViewModel.Files.Count < 1)
+            if (entryViewModel.Files.Count < 1)
             {
                 return entryViewModel;
             }
@@ -63,9 +63,9 @@ namespace FileDelivery.Models
                     var filePath = Path.Combine(entryPath, Path.GetRandomFileName());
                     using (var stream = File.Create(filePath))
                     {
-                        file.CopyToAsync(stream);
+                        await file.CopyToAsync(stream);
                     }
-                    var upload = new Upload() { ContentType = file.ContentType, FileName = file.FileName, Path = filePath };
+                    var upload = new Upload() { ContentType = file.ContentType, FileName = file.FileName, Path = Path.GetRelativePath(rootPath, filePath) };
                     entryViewModel.Uploads.Add(upload);
                 }
             }

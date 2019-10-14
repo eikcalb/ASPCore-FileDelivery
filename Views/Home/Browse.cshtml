@@ -1,0 +1,74 @@
+﻿@model Entry;
+@{
+    ViewData["Title"] = "Browse Submissions";
+}
+
+<div class="text-center pb-5">
+    <h1 class="display-2">Find files on File Delivery</h1>
+</div>
+<form asp-action="Browse" asp-controller="Home" method="get">
+
+    <div class="row">
+        <div class="col">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <input asp-for="TransactionID" class="form-control" autocomplete="off" placeholder="@Html.DisplayNameFor(e=>e.TransactionID)">
+        <span asp-validation-for="TransactionID" class="text-danger form-text"></span>
+
+        <input asp-for="EmailAddress" autocomplete="email" class="form-control" placeholder="@Html.DisplayNameFor(e=>e.EmailAddress)">
+        <span class="text-danger form-text" asp-validation-for="EmailAddress"></span>
+        <div class="input-group-append">
+            <button class="btn btn-block btn-primary" type="submit"> Find </button>
+        </div>
+    </div>
+</form>
+
+@{
+    if (Model != null)
+    {
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">Hello, @Html.DisplayFor(e => e.Name)</h1>
+                <p class="lead">Your files are ready!</p>
+                <p class="lead">Click on any of the buttons below to download your files.</p>
+            </div>
+        </div>
+        <div class="p-2">
+            <div class="row">
+                <div class="col-2 text-uppercase">@Html.DisplayNameFor(e => e.TransactionID)</div>
+                <div class="col-10">@Html.DisplayFor(e => e.TransactionID)</div>
+            </div>
+            <div class="row">
+                <div class="col-2 text-uppercase">@Html.DisplayNameFor(e => e.EmailAddress)</div>
+                <div class="col-10">@Html.DisplayFor(e => e.EmailAddress)</div>
+            </div>
+            <div class="row">
+                <div class="col-2 text-uppercase">@Html.DisplayNameFor(e => e.PhoneNumber)</div>
+                <div class="col-10 text-uppercase">@Html.DisplayFor(e => e.PhoneNumber)</div>
+            </div>
+            <div class="row">
+                <div class="col-2 text-uppercase">@Html.DisplayNameFor(e => e.Age)</div>
+                <div class="col-10">@Html.DisplayFor(e => e.Age)</div>
+            </div>
+
+            <div class="row m-4">
+                @{ foreach (Upload upload in Model.Uploads)
+                    {
+                        <a download="@upload.FileName" href="@upload.Path" class="col-5 btn btn-block btn-outline-info p-3 m-1">
+                            @HtmlEncoder.Encode(upload.FileName) <span class="badge badge-pill badge-dark">@HtmlEncoder.Encode(upload.ContentType)</span>
+                        </a>
+                    };
+                    /**/}
+            </div>
+
+        </div>
+    }
+}
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

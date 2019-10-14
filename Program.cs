@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace FileDelivery
 {
@@ -12,7 +13,8 @@ namespace FileDelivery
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+            .ConfigureWebHost(c=> c.ConfigureKestrel(k=>k.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(8)))    
+            .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });

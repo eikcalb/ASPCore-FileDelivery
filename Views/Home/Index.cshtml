@@ -13,13 +13,13 @@
     <div class="p-3 alert alert-info">
         <div class="h6 text-muted col-12">Transaction ID</div>
         <div class="h4 col-12">
-            @TempData.Peek("TranxID")
+            @TempData.Peek("TransactionID")
         </div>
     </div>
 
-    @Html.Hidden("TransactionID", TempData.Peek("TranxID"))
+    @Html.Hidden("TransactionID", TempData.Peek("TransactionID"))
     @{
-        TempData.Keep("TranxID");
+        TempData.Keep("TransactionID");
     }
 
     <div class="row">

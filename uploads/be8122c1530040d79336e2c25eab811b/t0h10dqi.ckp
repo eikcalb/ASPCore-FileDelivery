@@ -1,0 +1,25 @@
+{
+  "courses" : {
+    "-Lnyz71HFkYfA3yDcHFn" : {
+      "author" : {
+        "id" : "yeQD7G7y91SiNgUJChDtrn7Szr22"
+      },
+      "cover" : "https://firebasestorage.googleapis.com/v0/b/assetmanager-fdc73.appspot.com/o/courses%2F-Lnyz71HFkYfA3yDcHFn%2Fcover?alt=media&token=de83ab34-ae54-4096-89be-66d528c17620",
+      "creationTime" : 1567645993004,
+      "details" : {
+        "description" : "Taiwo gaspers is a"
+      },
+      "title" : "Taiwo gaspers"
+    }
+  },
+  "users" : {
+    "yeQD7G7y91SiNgUJChDtrn7Szr22" : {
+      "_isAdmin" : true,
+      "created" : "Tue, 03 Sep 2019 17:44:38 GMT",
+      "disabled" : false,
+      "displayName" : "John ladipopoe",
+      "email" : "A@b.com",
+      "uid" : "yeQD7G7y91SiNgUJChDtrn7Szr22"
+    }
+  }
+}

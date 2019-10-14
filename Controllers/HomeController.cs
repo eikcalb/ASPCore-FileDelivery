@@ -8,6 +8,10 @@ using FileDelivery.Models;
 using Microsoft.AspNetCore.Hosting;
 using FileDelivery.DAL;
 using Microsoft.Extensions.Configuration;
+using FileDelivery.Util;
+using System.Linq;
+using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace FileDelivery.Controllers
 {
@@ -27,8 +31,8 @@ namespace FileDelivery.Controllers
 
         public IActionResult Index()
         {
-            TempData["TranxID"] = Guid.NewGuid().ToString("N");
-            _logger.LogInformation(TempData.Peek("TranxID") as string);
+            TempData["TransactionID"] = Guid.NewGuid().ToString("N");
+            _logger.LogInformation("TransactionID is: " + TempData.Peek("TransactionID") as string);
 
             return View();
         }
@@ -44,18 +48,23 @@ namespace FileDelivery.Controllers
                 {
                     // Verify if transaction ID is valid. This was generated in the GET request.
                     // If transaction I is invalid, client should reload the GET request for Index.
-                    _logger.LogInformation(TempData.Peek("TranxID") as string);
-                    if (!String.Equals(TempData["TranxID"], entry.TransactionID))
+                    _logger.LogInformation("TransactionID is:  " + TempData.Peek("TransactionID") as string);
+                    if (!String.Equals(TempData["TransactionID"], entry.TransactionID))
                     {
                         return Unauthorized(new { Status = "Expired transaction id! Refresh the page!" });
                     }
 
                     // Parse upload and save files to system.
-                    var freshEntry = await entry.Parse(entry,_environment.WebRootPath);
+                    var freshEntry = await entry.Parse(entry, _environment.ContentRootPath);
 
                     // Add entry to database.
                     _db.Entries.Add(freshEntry);
+
+                    // Send email to user.
+                    await Mail.SendEmailAsync(freshEntry, new MimeKit.MailboxAddress(freshEntry.Name, freshEntry.EmailAddress));
+
                     _db.SaveChanges();
+
 
                     if (isApiRequest())
                     {
@@ -87,23 +96,28 @@ namespace FileDelivery.Controllers
             }
         }
 
-        public async Task<IActionResult> Browse()
-        {
-            return View();
-        }
-
-
         /**
-         * <see cref="Details(int)"/> displays the uploaded entry UI to users.
-         * When provided with an `id`, the particular <see cref="Entry"/> with that id is displayed.
+         * <see cref="Browse(string, string)"/> displays the uploaded entry UI to users.
+         * When provided with a `TransactionID` and `EmailAddress`, the particular <see cref="Entry"/> with that id is displayed.
          * 
          * 
-         * param name="id" the entry identifier.
+         * param name="TransactionID" the entry identifier.
+         * param name="EmailAddress" the email address used for submission.
          */
-        public async Task<IActionResult> Details(int id)
+        public ActionResult Browse(string TransactionID, string EmailAddress)
         {
+            if (!String.IsNullOrWhiteSpace(TransactionID) || !String.IsNullOrWhiteSpace(EmailAddress))
+            {
+                var result = _db.Entries
+                    .Where(e => e.EmailAddress.Equals(EmailAddress) && e.TransactionID.Equals(TransactionID))
+                    .Include(e => e.Uploads)
+                    .FirstOrDefault();
+                Debug.WriteLine(result);
+                return View(result);
+            }
             return View();
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
